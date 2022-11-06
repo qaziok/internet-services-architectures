@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pl.edu.pg.qaziok.laboratory_app.movie.entity.Movie;
 import pl.edu.pg.qaziok.laboratory_app.movie.repository.MovieRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,20 +18,27 @@ public class MovieService {
         this.repository = movieRepository;
     }
 
-    public Optional<Movie> find(String title){
-        return repository.find(title);
+    public Optional<Movie> find(Long id){
+        return repository.findById(id);
     }
 
     public List<Movie> findAll(){
         return repository.findAll();
     }
 
-    public void create(Movie movie){
-        repository.create(movie);
+    @Transactional
+    public Movie create(Movie movie){
+        return repository.save(movie);
     }
 
-    public void delete(Movie movie){
-        repository.delete(movie);
+    @Transactional
+    public void delete(Long id){
+        repository.deleteById(id);
+    }
+
+    @Transactional
+    public void update(Movie movie){
+        repository.save(movie);
     }
 
 

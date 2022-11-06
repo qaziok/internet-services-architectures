@@ -1,0 +1,81 @@
+GET http://localhost:8080/api/directors
+
+###
+
+GET http://localhost:8080/api/directors/1
+
+###
+
+GET http://localhost:8080/api/directors/8/movies
+
+###
+
+GET http://localhost:8080/api/movies
+
+###
+
+GET http://localhost:8080/api/movies/1
+
+###
+
+
+POST http://localhost:8080/api/directors
+Content-Type: application/json
+
+{
+  "name": "The Wachowski Brothers",
+  "birthDate": "1965-06-21"
+}
+
+###
+
+POST http://localhost:8080/api/movies
+Content-Type: application/json
+
+{
+  "title": "The Matrix",
+  "genre": "Sci-Fi",
+  "releaseDate": "1999-03-31",
+  "director": 12
+}
+
+###
+
+GET http://localhost:8080/api/directors/12/movies
+
+###
+
+PUT http://localhost:8080/api/movies/107
+Content-Type: application/json
+
+{
+  "title": "The Matrix Reloaded",
+  "genre": "Sci-Fi",
+  "releaseDate": "2003-05-15"
+}
+
+###
+
+DELETE http://localhost:8080/api/movies/107
+
+###
+
+DELETE http://localhost:8080/api/directors/8
+
+###
+
+GET http://localhost:8080/api/movies
+
+###
+
+GET http://localhost:8080/api/directors/1
+
+###
+
+PUT http://localhost:8080/api/directors/1
+Content-Type: application/json
+
+{
+  "name": "Quentin Tarantino",
+  "birthDate": "1963-03-27"
+}

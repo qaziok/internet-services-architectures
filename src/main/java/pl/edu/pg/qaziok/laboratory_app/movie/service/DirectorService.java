@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pl.edu.pg.qaziok.laboratory_app.movie.entity.Director;
 import pl.edu.pg.qaziok.laboratory_app.movie.repository.DirectorRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,19 +18,26 @@ public class DirectorService {
         this.repository = repository;
     }
 
-    public Optional<Director> find(String id){
-        return repository.find(id);
+    public Optional<Director> find(Long id){
+        return repository.findById(id);
     }
 
     public List<Director> findAll(){
         return repository.findAll();
     }
 
-    public void create(Director director){
-        repository.create(director);
+    @Transactional
+    public Director create(Director director){
+        return repository.save(director);
     }
 
-    public void delete(Director director){
-        repository.delete(director);
+    @Transactional
+    public void delete(Long id){
+        repository.deleteById(id);
+    }
+
+    @Transactional
+    public void update(Director director){
+        repository.save(director);
     }
 }
