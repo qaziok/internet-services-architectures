@@ -2,7 +2,7 @@ GET http://localhost:8080/api/directors
 
 ###
 
-GET http://localhost:8080/api/directors/1
+GET http://localhost:8080/api/directors/1/movies
 
 ###
 
