@@ -51,7 +51,7 @@ public class DirectorMovieController {
     public ResponseEntity<Void> createMovie(@PathVariable("directorId") Long directorId, @RequestBody CreateMovieRequest request, UriComponentsBuilder builder){
         Optional<Director> director = directorService.find(directorId);
         if(director.isPresent()){
-            Movie createdMovie = CreateMovieRequest.dtoToEntityMapper(director::get).apply(request);
+            Movie createdMovie = CreateMovieRequest.dtoToEntityMapper(id -> director.get()).apply(request);
             movieService.create(createdMovie);
 
             return ResponseEntity.created(builder.pathSegment("api", "directors", "{directorId}", "movies", "{movieId}")

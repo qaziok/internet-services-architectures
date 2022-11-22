@@ -23,13 +23,13 @@ public class CreateMovieRequest {
     private LocalDate releaseDate;
 
     public static Function<CreateMovieRequest, Movie> dtoToEntityMapper(
-            Supplier<Director> directorSupplier
+            Function<Long,Director> directorFinder
     ) {
         return request -> Movie.builder()
                 .title(request.getTitle())
                 .genre(request.getGenre())
                 .releaseDate(request.getReleaseDate())
-                .director(directorSupplier.get())
+                .director(directorFinder.apply(request.getDirector()))
                 .build();
     }
 }

@@ -47,8 +47,12 @@ public class MovieController {
     @PostMapping
     public ResponseEntity<Void> createMovie(@RequestBody CreateMovieRequest request, UriComponentsBuilder builder){
         Movie movie = CreateMovieRequest
-                .dtoToEntityMapper(() -> null)
+                .dtoToEntityMapper(id -> directorService.find(id).orElse(null))
                 .apply(request);
+
+        if (movie.getDirector() == null) {
+            return ResponseEntity.notFound().build();
+        }
         movie = movieService.create(movie);
         return ResponseEntity.created(builder.pathSegment("api", "movies", "{id}")
                 .buildAndExpand(movie.getId()).toUri()).build();
