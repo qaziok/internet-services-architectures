@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.core.env.Environment;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
@@ -21,11 +22,11 @@ import java.util.Collections;
 @SpringBootApplication
 public class GatewayApplication {
 
-    private final DiscoveryClient discoveryClient;
+    private final Environment environment;
 
     @Autowired
-    public GatewayApplication(DiscoveryClient discoveryClient) {
-        this.discoveryClient = discoveryClient;
+    public GatewayApplication(Environment environment) {
+        this.environment = environment;
     }
 
     public static void main(String[] args) {
@@ -34,21 +35,19 @@ public class GatewayApplication {
 
     @Bean
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
-        String movieUrl = discoveryClient.getInstances("movie").stream()
-                .findFirst().map(ServiceInstance::getUri).map(URI::toString).orElseThrow();//("http://localhost:8082");
-
-        String directorUrl = discoveryClient.getInstances("director").stream()
-                .findFirst().map(ServiceInstance::getUri).map(URI::toString).orElseThrow();//("http://localhost:8081");
+        String host = environment.getProperty("server.host") + ":" + environment.getProperty("server.port");
+        String directorUrl = "http://" + environment.getProperty("gateway.directors");
+        String movieUrl = "http://" + environment.getProperty("gateway.movies");
 
         return builder
                 .routes()
                 .route("directors", r -> r
-                        .host("localhost:8080")
+                        .host(host)
                         .and()
                         .path("/api/directors/{id}", "/api/directors")
                         .uri(directorUrl))
                 .route("movies", r -> r
-                        .host("localhost:8080")
+                        .host(host)
                         .and()
                         .path("/api/movies", "/api/movies/**", "/api/directors/movies", "/api/directors/{id}/movies", "/api/directors/{id}/movies/**")
                         .uri(movieUrl))

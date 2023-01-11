@@ -11,17 +11,27 @@ function DirectorView() {
     const [searchParams, _] = useSearchParams();
     const id = searchParams.get('id')
     let navigate = useNavigate();
-
-    const notFound = (error) => {
-        navigate(`${error.message}`)
-    }
+    const [notFound, setNotFound] = useState(false);
 
     useEffect(() => {
-        getDirector(id).catch(reason => notFound(reason)).then(data => {
-            setData(data)
-            return getDirectorMovies(id)
+        getDirector(id).then(data => {
+            if (data === 404){
+                setNotFound(true)
+            } else {
+                setData(data)
+                return getDirectorMovies(id)
+            }
         }).then(movies => setMovies(movies['movies']));
     }, [deleted, id]);
+
+    if (notFound) {
+        return (
+            <div className="App">
+                <h1>404</h1>
+                <h2>Director not found</h2>
+            </div>
+        )
+    }
 
     const buttons = (row, index) => {
         return (

@@ -10,6 +10,7 @@ const MovieForm = () => {
     const [director, setDirector] = useState('');
 
     const [searchParams, _] = useSearchParams();
+    const [notFound, setNotFound] = useState(false);
     const movie_id = searchParams.get('movie_id')
     const director_id = searchParams.get('director_id')
 
@@ -19,7 +20,7 @@ const MovieForm = () => {
         if (movie_id) {
             getMovie(movie_id).then(data => {
                 if (data === 404) {
-                    navigate("404")
+                    setNotFound(true)
                 } else {
                     setTitle(data['title'])
                     setReleaseDate(data['releaseDate'])
@@ -31,13 +32,22 @@ const MovieForm = () => {
         } else {
             getDirector(director_id).then(dir => {
                 if (dir === 404) {
-                    navigate("/director/404")
+                    setNotFound(true)
                 } else {
                     setDirector(dir)
                 }
             });
         }
     }, [director_id, movie_id, navigate]);
+
+    if (notFound) {
+        return (
+        <div className="App">
+            <h1>404</h1>
+            <h2>Movie not found</h2>
+        </div>
+        )
+    }
 
     const send = (id, movie) => {
         return (id ? putMovie(id, movie) : postMovie(movie))

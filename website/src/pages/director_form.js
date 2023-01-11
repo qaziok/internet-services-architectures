@@ -5,6 +5,7 @@ import {getDirector, postDirector, putDirector} from "../components/ApiGateway/d
 function DirectorForm() {
     const [name, setName] = useState('');
     const [birthDate, setBirthDate] = useState('');
+    const [notFound, setNotFound] = useState(false);
 
     const [searchParams] = useSearchParams();
     const id = searchParams.get('id')
@@ -14,7 +15,7 @@ function DirectorForm() {
         if (id) {
             getDirector(id).then(data => {
                 if (data === 404){
-                    navigate('/director/new')
+                    setNotFound(true)
                 } else {
                     setName(data['name'])
                     setBirthDate(data['birthDate'])
@@ -22,6 +23,15 @@ function DirectorForm() {
             })
         }
     });
+
+    if (notFound) {
+        return (
+            <div className="App">
+                <h1>404</h1>
+                <h2>Director not found</h2>
+            </div>
+        )
+    }
 
     const send = (id, director) => {
         return (id ? putDirector(id, director) : postDirector(director))

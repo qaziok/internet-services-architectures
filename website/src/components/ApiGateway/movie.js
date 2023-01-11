@@ -1,4 +1,4 @@
-const MOVIES_URL = 'http://localhost:8080/api/movies';
+const MOVIES_URL = '/api/movies';
 
 async function json(response) {
     if (response.ok) {

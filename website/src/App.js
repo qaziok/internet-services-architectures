@@ -24,7 +24,6 @@ function App() {
             <Route path="/movie/edit" element={<MovieForm/>}/>
             <Route path="/director/movie/new" element={<MovieForm/>}/>
             <Route path="/movie" element={<MovieView/>}/>
-            <Route path="*" element={<NotFound/>}/>
         </Routes>
     </Router>
   );

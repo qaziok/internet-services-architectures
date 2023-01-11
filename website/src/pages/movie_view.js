@@ -10,17 +10,27 @@ const MovieView = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const id = searchParams.get('id')
     let navigate = useNavigate();
-
-    const notFound = (error) => {
-        navigate(`${error.message}`)
-    }
+    const [notFound, setNotFound] = useState(false);
 
     useEffect(() => {
-        getMovie(id).catch(reason => notFound(reason)).then(data => {
-            setData(data)
-            return getDirector(data['director'])
+        getMovie(id).then(data => {
+            if (data === 404){
+                setNotFound(true)
+            } else {
+                setData(data)
+                return getDirector(data['director'])
+            }
         }).then(dir => setDirector(dir));
     },[id]);
+
+    if (notFound) {
+        return (
+            <div className="App">
+                <h1>404</h1>
+                <h2>Movie not found</h2>
+            </div>
+        )
+    }
 
     return (
         <div className="App">

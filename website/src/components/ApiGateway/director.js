@@ -1,4 +1,4 @@
-const DIRECTORS_URL = 'http://localhost:8080/api/directors';
+const DIRECTORS_URL = '/api/directors';
 
 async function json(response) {
     if (response.ok) {
